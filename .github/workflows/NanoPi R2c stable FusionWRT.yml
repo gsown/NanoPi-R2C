@@ -11,8 +11,7 @@ name: NanoPi R2c stable FusionWRT
 on:
   repository_dispatch:
   workflow_dispatch:
-  schedule:
-    - cron: 0 17 * * *
+
   # watch:
   #   types: started
 
@@ -91,7 +90,6 @@ jobs:
         chmod +x scripts/*.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-        ../scripts/preset-clash-core.sh armv8
         ../scripts/preset-terminal-tools.sh
 
     - name: Download Package
