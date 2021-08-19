@@ -21,10 +21,10 @@ env:
   REPO_BRANCH: master
   CONFIG_FILE: configs/lean_stable.config
   DIY_SH: scripts/lean.sh
-  IPV6MOD_IN_FIRMWARE: true
-  KMODS_IN_FIRMWARE: true
-  UPLOAD_WETRANSFER: true
-  UPLOAD_COWTRANSFER: true
+  IPV6MOD_IN_FIRMWARE: false
+  KMODS_IN_FIRMWARE: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_COWTRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
@@ -78,16 +78,7 @@ jobs:
         git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
         chmod +x ../scripts/*.sh
         ../scripts/hook-feeds.sh
-    
-    - name: MOD index file
-      run: |
-         cd $OPENWRTROOT/package/lean/autocore/files/arm
-         sed -i '/Load Average/i\\t\t<tr><td width="33%"><%:Telegram %></td><td><a href="https://t.me/DHDAXCW"><%:电报交流群%></a></td></tr>' index.htm
-    - name: Modify SmartDNS
-      run: |
-         cd $OPENWRTROOT
-         find package/*/ feeds/*/ -maxdepth 6 -path "*luci-app-smartdns/luasrc/controller/smartdns.lua" | xargs -i sed -i 's/\"SmartDNS\")\, 4/\"SmartDNS\")\, 3/g' {}
-         
+      
     - name: Install Feeds
       run: |
         cd $OPENWRTROOT
@@ -256,9 +247,6 @@ jobs:
         run: |
           echo "::set-output name=release_tag::$(date +"%Y.%m.%d")-Lean5"
           echo "::set-output name=release_date::$(date +"%Y.%m.%d")"
-          touch release.txt
-          [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-          [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
           echo "::set-output name=status::success"
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
