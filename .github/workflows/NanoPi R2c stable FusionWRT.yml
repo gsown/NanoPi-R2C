@@ -245,6 +245,7 @@ jobs:
         run: |
           echo "::set-output name=release_tag::$(date +"%Y.%m.%d")-Lean5"
           echo "::set-output name=release_date::$(date +"%Y.%m.%d")"
+          touch release.txt
           echo "::set-output name=status::success"
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
